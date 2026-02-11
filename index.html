@@ -48,24 +48,21 @@ button {
   position: absolute;
 }
 
-@keyframes floatHeart {
-  0% { transform: translateY(0) scale(1); opacity: 1;}
-  100% { transform: translateY(-800px) scale(0.5); opacity: 0;}
+.heart, .broken {
+  position: fixed;
+  font-size: 28px;
+  animation: floatUp 2s ease-out forwards;
 }
 
-.heart {
-  position: fixed;
-  bottom: -20px;
-  font-size: 24px;
-  color: red;
-  animation: floatHeart 6s linear infinite;
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-150px); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- MUSIC -->
 <audio id="music" loop>
   <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
 </audio>
@@ -78,26 +75,26 @@ button {
 
 <div class="card question" id="q1">
   1. Do you believe in love?<br><br>
-  <button onclick="nextQ(2)">Yes</button>
-  <button onclick="nextQ(2)">No</button>
+  <button onclick="answer(true,2)">Yes</button>
+  <button onclick="answer(false,2)">No</button>
 </div>
 
 <div class="card question" id="q2">
   2. Do you like surprises?<br><br>
-  <button onclick="nextQ(3)">Yes</button>
-  <button onclick="nextQ(3)">No</button>
+  <button onclick="answer(true,3)">Yes</button>
+  <button onclick="answer(false,3)">No</button>
 </div>
 
 <div class="card question" id="q3">
   3. Do you enjoy spending time with me?<br><br>
-  <button onclick="nextQ(4)">Yes</button>
-  <button onclick="nextQ(4)">No</button>
+  <button onclick="answer(true,4)">Yes</button>
+  <button onclick="answer(false,4)">No</button>
 </div>
 
 <div class="card question" id="q4">
   4. Do you like chocolates? 🍫<br><br>
-  <button onclick="nextQ(5)">Yes</button>
-  <button onclick="nextQ(5)">No</button>
+  <button onclick="answer(true,5)">Yes</button>
+  <button onclick="answer(false,5)">No</button>
 </div>
 
 <div class="card question" id="q5">
@@ -114,69 +111,73 @@ button {
 <script>
 let current = 1;
 
-/* TYPING EFFECT */
-function typeText(elementId, text, speed){
-  let i = 0;
-  let element = document.getElementById(elementId);
-  element.innerHTML = "";
-  let interval = setInterval(() => {
-    if(i < text.length){
-      element.innerHTML += text.charAt(i);
-      i++;
-    } else {
-      clearInterval(interval);
-    }
+/* Typing */
+function typeText(id, text, speed){
+  let i=0, el=document.getElementById(id);
+  el.innerHTML="";
+  let t=setInterval(()=>{
+    if(i<text.length){ el.innerHTML+=text[i++]; }
+    else clearInterval(t);
   }, speed);
 }
 
-/* START */
 window.onload = function(){
-  typeText("welcomeText", "💖 Welcome Ankit 💖", 100);
-  setTimeout(()=>{
-    typeText("welcomeSub", "To 2026, first Valentine after marriage 💍", 80);
-  }, 2000);
+  typeText("welcomeText","💖 Welcome Ankit 💖",100);
+  setTimeout(()=>{typeText("welcomeSub","To 2026, first Valentine after marriage 💍",80);},1500);
 }
 
+/* Start */
 function startQuiz(){
-  document.getElementById("welcome").style.display = "none";
-  document.getElementById("q1").style.display = "block";
+  document.getElementById("welcome").style.display="none";
+  document.getElementById("q1").style.display="block";
   document.getElementById("music").play();
 }
 
-function nextQ(n){
+/* Answer Logic */
+function answer(correct,next){
+  if(correct) popHeart();
+  else breakHeart();
+
   document.getElementById("q"+current).style.display="none";
-  document.getElementById("q"+n).style.display="block";
-  current = n;
+  document.getElementById("q"+next).style.display="block";
+  current=next;
 }
 
+/* Heart effects */
+function popHeart(){
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*window.innerWidth+"px";
+  h.style.top=Math.random()*window.innerHeight+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),2000);
+}
+
+function breakHeart(){
+  let b=document.createElement("div");
+  b.className="broken";
+  b.innerHTML="💔";
+  b.style.left=Math.random()*window.innerWidth+"px";
+  b.style.top=Math.random()*window.innerHeight+"px";
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),2000);
+}
+
+/* No button move */
 function moveNo(){
-  let btn = document.getElementById("noBtn");
-  let x = Math.random() * (window.innerWidth - 100);
-  let y = Math.random() * (window.innerHeight - 100);
-  btn.style.left = x + "px";
-  btn.style.top = y + "px";
+  let btn=document.getElementById("noBtn");
+  btn.style.left=Math.random()*(window.innerWidth-100)+"px";
+  btn.style.top=Math.random()*(window.innerHeight-100)+"px";
 }
 
+/* Final */
 function yesFinal(){
   document.getElementById("q5").style.display="none";
   document.getElementById("final").style.display="block";
-  typeText("finalText", "🥰 Yayyyy 💖", 100);
-  setTimeout(()=>{
-    typeText("finalSub", "Thanks for being my wabi sabi 🌸", 80);
-  }, 1500);
+  typeText("finalText","🥰 Yayyyy 💖",100);
+  setTimeout(()=>{typeText("finalSub","Thanks for being my wabi sabi 🌸",80);},1200);
 }
-
-/* HEART ANIMATION */
-function createHeart(){
-  let heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "❤️";
-  heart.style.left = Math.random() * window.innerWidth + "px";
-  heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
-  document.body.appendChild(heart);
-  setTimeout(() => { heart.remove(); }, 6000);
-}
-setInterval(createHeart, 300);
 </script>
 
 </body>
