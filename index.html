@@ -1,1 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
 
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(#ff9a9e, #fad0c4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  overflow: hidden;
+}
+
+h1 {
+  color: #c2185b;
+  font-size: 42px;
+  min-height: 80px;
+}
+
+button {
+  padding: 14px 40px;
+  font-size: 22px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  margin: 20px;
+}
+
+#yesBtn {
+  background: #ff4d6d;
+  color: white;
+  transition: transform 0.3s;
+}
+
+#noBtn {
+  background: #777;
+  color: white;
+  position: relative;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question"></h1>
+
+<div>
+  <button id="yesBtn" onclick="yesClicked()">Yes</button>
+  <button id="noBtn" onclick="noClicked()">No</button>
+</div>
+
+<script>
+let noCount = 0;
+let typingInterval;
+
+const messages = [
+  "Will you be my Valentine? 💖",
+  "Are you sure? 😢",
+  "Pookie please 🥺",
+  "Apne babu ke sath aise karoge? 💔",
+  "Itna bhi bhaav nahi khana tha 😭",
+  "Last chance, maan jao na ❤️",
+  "Soch lo acche se… 😏"
+];
+
+// Typing effect
+function typeText(text) {
+  clearInterval(typingInterval);
+  let i = 0;
+  const q = document.getElementById("question");
+  q.innerHTML = "";
+  typingInterval = setInterval(() => {
+    if (i < text.length) {
+      q.innerHTML += text.charAt(i);
+      i++;
+    } else {
+      clearInterval(typingInterval);
+    }
+  }, 60);
+}
+
+// First message
+typeText(messages[0]);
+
+function noClicked() {
+  if (noCount < messages.length - 1) {
+    noCount++;
+    typeText(messages[noCount]);
+
+    // Grow YES button
+    let yesBtn = document.getElementById("yesBtn");
+    let scale = 1 + noCount * 0.2;
+    yesBtn.style.transform = "scale(" + scale + ")";
+  }
+
+  // After last message → No runs away
+  if (noCount >= messages.length - 1) {
+    document.getElementById("noBtn").onmouseover = moveNo;
+  }
+}
+
+function moveNo() {
+  let noBtn = document.getElementById("noBtn");
+  let x = Math.random() * (window.innerWidth - 150);
+  let y = Math.random() * (window.innerHeight - 100);
+  noBtn.style.position = "fixed";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+function yesClicked() {
+  document.body.innerHTML = `
+    <h1 style="color:#c2185b;font-size:50px;">Yayyyy 💖</h1>
+    <h2>You are my Valentine forever 😘</h2>
+  `;
+}
+</script>
+
+</body>
+</html>
