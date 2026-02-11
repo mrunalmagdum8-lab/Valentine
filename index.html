@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Love Card 💖</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive;
+  background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+  text-align: center;
+  overflow: hidden;
+}
+
+.card {
+  background: white;
+  width: 80%;
+  max-width: 500px;
+  margin: 100px auto;
+  padding: 30px;
+  border-radius: 25px;
+  box-shadow: 0 0 20px rgba(255,0,100,0.5);
+}
+
+.question {
+  display: none;
+  font-size: 22px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 15px;
+  border: none;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.yes {
+  background-color: #ff4d6d;
+  color: white;
+}
+
+.no {
+  background-color: #666;
+  color: white;
+  position: absolute;
+}
+
+@keyframes floatHeart {
+  0% { transform: translateY(0) scale(1); opacity: 1;}
+  100% { transform: translateY(-800px) scale(0.5); opacity: 0;}
+}
+
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 24px;
+  color: red;
+  animation: floatHeart 6s linear infinite;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
+</audio>
+
+<div class="card" id="welcome">
+  <h1 id="welcomeText"></h1>
+  <p id="welcomeSub"></p>
+  <button class="yes" onclick="startQuiz()">Start 💘</button>
+</div>
+
+<div class="card question" id="q1">
+  1. Do you believe in love?<br><br>
+  <button onclick="nextQ(2)">Yes</button>
+  <button onclick="nextQ(2)">No</button>
+</div>
+
+<div class="card question" id="q2">
+  2. Do you like surprises?<br><br>
+  <button onclick="nextQ(3)">Yes</button>
+  <button onclick="nextQ(3)">No</button>
+</div>
+
+<div class="card question" id="q3">
+  3. Do you enjoy spending time with me?<br><br>
+  <button onclick="nextQ(4)">Yes</button>
+  <button onclick="nextQ(4)">No</button>
+</div>
+
+<div class="card question" id="q4">
+  4. Do you like chocolates? 🍫<br><br>
+  <button onclick="nextQ(5)">Yes</button>
+  <button onclick="nextQ(5)">No</button>
+</div>
+
+<div class="card question" id="q5">
+  💖 Will you be my Valentine? 💖<br><br>
+  <button class="yes" onclick="yesFinal()">Yes</button>
+  <button class="no" id="noBtn" onmouseover="moveNo()">No</button>
+</div>
+
+<div class="card question" id="final">
+  <h1 id="finalText"></h1>
+  <p id="finalSub"></p>
+</div>
+
+<script>
+let current = 1;
+
+/* TYPING EFFECT */
+function typeText(elementId, text, speed){
+  let i = 0;
+  let element = document.getElementById(elementId);
+  element.innerHTML = "";
+  let interval = setInterval(() => {
+    if(i < text.length){
+      element.innerHTML += text.charAt(i);
+      i++;
+    } else {
+      clearInterval(interval);
+    }
+  }, speed);
+}
+
+/* START */
+window.onload = function(){
+  typeText("welcomeText", "💖 Welcome Ankit 💖", 100);
+  setTimeout(()=>{
+    typeText("welcomeSub", "To 2026, first Valentine after marriage 💍", 80);
+  }, 2000);
+}
+
+function startQuiz(){
+  document.getElementById("welcome").style.display = "none";
+  document.getElementById("q1").style.display = "block";
+  document.getElementById("music").play();
+}
+
+function nextQ(n){
+  document.getElementById("q"+current).style.display="none";
+  document.getElementById("q"+n).style.display="block";
+  current = n;
+}
+
+function moveNo(){
+  let btn = document.getElementById("noBtn");
+  let x = Math.random() * (window.innerWidth - 100);
+  let y = Math.random() * (window.innerHeight - 100);
+  btn.style.left = x + "px";
+  btn.style.top = y + "px";
+}
+
+function yesFinal(){
+  document.getElementById("q5").style.display="none";
+  document.getElementById("final").style.display="block";
+  typeText("finalText", "🥰 Yayyyy 💖", 100);
+  setTimeout(()=>{
+    typeText("finalSub", "Thanks for being my wabi sabi 🌸", 80);
+  }, 1500);
+}
+
+/* HEART ANIMATION */
+function createHeart(){
+  let heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => { heart.remove(); }, 6000);
+}
+setInterval(createHeart, 300);
+</script>
+
+</body>
+</html>
