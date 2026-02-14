@@ -1,1 +1,157 @@
-a
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #111, #444);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+  text-align: center;
+  overflow: hidden;
+}
+
+h1 {
+  color: #fff;
+  font-size: 42px;
+  min-height: 90px;
+  padding: 0 20px;
+}
+
+#picture {
+  width: 300px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 20px;
+  margin-top: 15px;
+  filter: grayscale(100%);
+  box-shadow: 0 0 25px rgba(255,255,255,0.4);
+  background: white;
+}
+
+.buttons {
+  display: flex;
+  gap: 140px;
+  margin-top: 40px;
+}
+
+button {
+  padding: 16px 45px;
+  font-size: 22px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+}
+
+#yesBtn {
+  background: white;
+  color: black;
+  transition: transform 0.3s;
+}
+
+#noBtn {
+  background: #777;
+  color: white;
+  position: relative;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question"></h1>
+
+<img id="picture" src="" alt="snoopy picture">
+
+<div class="buttons">
+  <button id="yesBtn" onclick="yesClicked()">Yes</button>
+  <button id="noBtn" onclick="noClicked()">No</button>
+</div>
+
+<script>
+let noCount = 0;
+let typingInterval;
+
+const messages = [
+  "Will you be my Valentine? 🖤",
+  "Are you sure? 😢",
+  "Pookie please 🥺",
+  "Apne babu ke sath aise karoge? 💔",
+  "Itna bhi bhaav nahi khana tha 😭",
+  "Last chance… maan jao na ❤️",
+  "Soch lo acche se 😏"
+];
+
+const pictures = [
+  "https://i.imgur.com/6Z8Fq2K.png",
+  "https://i.imgur.com/vhJp3kE.png",
+  "https://i.imgur.com/0j9J0vN.png",
+  "https://i.imgur.com/0sR2z3E.png",
+  "https://i.imgur.com/9F3nG5J.png",
+  "https://i.imgur.com/yXxkFqT.png",
+  "https://i.imgur.com/6Z8Fq2K.png"
+];
+
+function typeText(text, img) {
+  clearInterval(typingInterval);
+  let i = 0;
+  const q = document.getElementById("question");
+  q.innerHTML = "";
+  document.getElementById("picture").src = img;
+
+  typingInterval = setInterval(() => {
+    if (i < text.length) {
+      q.innerHTML += text.charAt(i);
+      i++;
+    } else {
+      clearInterval(typingInterval);
+    }
+  }, 60);
+}
+
+typeText(messages[0], pictures[0]);
+
+function noClicked() {
+  if (noCount < messages.length - 1) {
+    noCount++;
+    typeText(messages[noCount], pictures[noCount]);
+
+    let yesBtn = document.getElementById("yesBtn");
+    let scale = 1 + noCount * 0.25;
+    yesBtn.style.transform = "scale(" + scale + ")";
+  }
+
+  if (noCount >= messages.length - 1) {
+    document.getElementById("noBtn").onmouseover = moveNo;
+  }
+}
+
+function moveNo() {
+  let noBtn = document.getElementById("noBtn");
+  let x = Math.random() * (window.innerWidth - 150);
+  let y = Math.random() * (window.innerHeight - 100);
+  noBtn.style.position = "fixed";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+function yesClicked() {
+  document.body.innerHTML = `
+    <h1 style="color:white;font-size:50px;">Yayyyyy 🖤</h1>
+    <h2>Thanks for being my Wabi-Sabi ❤️</h2>
+    <img src="https://i.imgur.com/6Z8Fq2K.png" 
+         style="width:320px;border-radius:20px;filter:grayscale(100%);
+         box-shadow:0 0 25px rgba(255,255,255,0.4);background:white;">
+  `;
+}
+</script>
+
+</body>
+</html>
